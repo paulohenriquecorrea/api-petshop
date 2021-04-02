@@ -8,7 +8,7 @@ roteador.get('/', async (req, res) => {
   res.send(JSON.stringify(resultado));
 });
 
-roteador.get('/:idFornecedor', async (req, res) => {
+roteador.get('/:idFornecedor', async (req, res, proximo) => {
   try {
     const id = req.params.idFornecedor;
     const fornecedor = new Fornecedor({ id: id });
@@ -16,16 +16,11 @@ roteador.get('/:idFornecedor', async (req, res) => {
     res.status(200);
     res.send(JSON.stringify(fornecedor));
   } catch (error) {
-    res.status(404);
-    res.send(
-      JSON.stringify({
-        mensagem: error.message,
-      })
-    );
+    proximo(error);
   }
 });
 
-roteador.post('/', async (req, res) => {
+roteador.post('/', async (req, res, proximo) => {
   try {
     const dadosRecebidos = req.body;
     const fornecedor = new Fornecedor(dadosRecebidos);
@@ -33,16 +28,11 @@ roteador.post('/', async (req, res) => {
     res.status(201);
     res.send(JSON.stringify(fornecedor));
   } catch (error) {
-    res.status(400);
-    res.send(
-      JSON.stringify({
-        mensagem: error.message,
-      })
-    );
+    proximo(error);
   }
 });
 
-roteador.put('/:idFornecedor', async (req, res) => {
+roteador.put('/:idFornecedor', async (req, res, proximo) => {
   try {
     const id = req.params.idFornecedor;
     const dadosRecebidos = req.body;
@@ -52,16 +42,11 @@ roteador.put('/:idFornecedor', async (req, res) => {
     res.status(204);
     res.end();
   } catch (erro) {
-    res.status(400);
-    res.send(
-      JSON.stringify({
-        mensagem: erro.message,
-      })
-    );
+    proximo(erro);
   }
 });
 
-roteador.delete('/:idFornecedor', async (req, res) => {
+roteador.delete('/:idFornecedor', async (req, res, proximo) => {
   try {
     const id = req.params.idFornecedor;
     const fornecedor = new Fornecedor({ id: id });
@@ -70,12 +55,7 @@ roteador.delete('/:idFornecedor', async (req, res) => {
     res.status(204);
     res.end();
   } catch (error) {
-    res.status(404);
-    res.send(
-      JSON.stringify({
-        mensagem: error.message,
-      })
-    );
+    proximo(error);
   }
 });
 
