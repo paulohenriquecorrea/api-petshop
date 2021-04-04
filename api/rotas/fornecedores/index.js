@@ -14,13 +14,15 @@ roteador.get('/', async (req, res) => {
 });
 
 roteador.get('/:idFornecedor', async (req, res, proximo) => {
+  const camposExtras = ['email', 'dataCriacao', 'dataAtualizacao', 'versao'];
   try {
     const id = req.params.idFornecedor;
     const fornecedor = new Fornecedor({ id: id });
     await fornecedor.carregar();
     res.status(200);
     const serializador = new SerializadorFornecedor(
-      res.getHeader('Content-Type')
+      res.getHeader('Content-Type'),
+      camposExtras
     );
     res.send(serializador.serializar(fornecedor));
   } catch (error) {
