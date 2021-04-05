@@ -1,10 +1,19 @@
-const ModeloTabelaFornecedor = require('../rotas/fornecedores/ModeloTabelaFornecedor');
-const ModeloTabelaFilmes = require('../rotas/filmes/ModeloTabelaFilme');
+const modelos = [
+  require('../rotas/fornecedores/ModeloTabelaFornecedor'),
+  require('../rotas/fornecedores/produtos/ModeloTabelaProduto'),
+  require('../rotas/filmes/ModeloTabelaFilme'),
+  require('../rotas/fornecedores/produtos/reclamacoes/ModeloTabelaReclamacoes'),
+];
 
-ModeloTabelaFornecedor.sync()
-  .then(() => console.log('Tabela Fornecedor criada com sucesso!'))
-  .catch(console.log);
+async function criarTabelas() {
+  // for (let i = 0; i < modelos.length; i++) {
+  //   const modelo = modelos[i];
+  //   await modelo.sync();
+  // }
 
-ModeloTabelaFilmes.sync()
-  .then(() => console.log('Tabela Filmes criada com sucesso!'))
-  .catch(console.log);
+  modelos.forEach(async (modelo) => {
+    await modelo.sync();
+  });
+}
+
+criarTabelas();
