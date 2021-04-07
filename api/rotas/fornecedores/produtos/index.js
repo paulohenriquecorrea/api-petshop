@@ -16,8 +16,8 @@ roteador.post('/', async (req, res, proximo) => {
     await produto.criar();
     res.status(201);
     res.send(produto);
-  } catch (error) {
-    proximo(error);
+  } catch (erro) {
+    proximo(erro);
   }
 });
 
