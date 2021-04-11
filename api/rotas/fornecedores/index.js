@@ -4,17 +4,39 @@ const Fornecedor = require('./Fornecedor');
 const SerializadorFornecedor = require('../../Serializador')
   .SerializadorFornecedor;
 
+roteador.options('/', (req, res) => {
+  res.set('Access-Control-Allow-Methods', 'GET, POST');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  res.status(204);
+  res.end();
+});
+
 roteador.get('/', async (req, res) => {
   const resultado = await TabelaFornecedor.listar();
   res.status(200);
   const serializador = new SerializadorFornecedor(
-    res.getHeader('Content-Type')
+    res.getHeader('Content-Type'),
+    ['empresa', 'categoria']
   );
   res.send(serializador.serializar(resultado));
 });
 
+roteador.options('/:idFornecedor', (req, res) => {
+  res.set('Access-Control-Allow-Methods', 'GET, PUT, DELETE');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  res.status(204);
+  res.end();
+});
+
 roteador.get('/:idFornecedor', async (req, res, proximo) => {
-  const camposExtras = ['email', 'dataCriacao', 'dataAtualizacao', 'versao'];
+  const camposExtras = [
+    'email',
+    'empresa',
+    'categoria',
+    'dataCriacao',
+    'dataAtualizacao',
+    'versao',
+  ];
   try {
     const id = req.params.idFornecedor;
     const fornecedor = new Fornecedor({ id: id });
@@ -37,7 +59,8 @@ roteador.post('/', async (req, res, proximo) => {
     await fornecedor.criar();
     res.status(201);
     const serializador = new SerializadorFornecedor(
-      res.getHeader('Content-Type')
+      res.getHeader('Content-Type'),
+      ['empresa', 'categoria']
     );
     res.send(serializador.serializar(fornecedor));
   } catch (error) {

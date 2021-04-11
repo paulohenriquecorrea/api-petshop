@@ -3,6 +3,7 @@ const app = express(); // Instância do express para gerar a aplicação
 const bodyParser = require('body-parser'); // Plugin
 const config = require('config');
 const roteadorFornecedores = require('./rotas/fornecedores');
+const roteadorFornecedoresv2 = require('./rotas/fornecedores/rotas.V2');
 const roteadorFilmes = require('./rotas/filmes');
 const NaoEncontrado = require('./erros/NaoEncontrado');
 const CampoInvalido = require('./erros/CampoInvalido');
@@ -28,7 +29,14 @@ app.use((req, res, proximo) => {
   proximo();
 });
 
+app.use((req, res, proximo) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  proximo();
+});
+
 app.use('/api/fornecedores', roteadorFornecedores);
+app.use('/api/v2/fornecedores', roteadorFornecedoresv2);
+
 app.use('/api/filmes', roteadorFilmes);
 
 app.use((erro, req, res, proximo) => {
